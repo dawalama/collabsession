@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.conf import settings
 
-from lt.models import GroupMessage as Message 
+from learntogether.models import GroupMessage as Message 
 
 conn = stomp.Connection()
 conn.start()
