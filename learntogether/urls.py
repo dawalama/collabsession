@@ -5,6 +5,9 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', 'lt.views.home', name='home'),
+    url(r'^message/', 'lt.messagebus.index', name='messages'),
+    url(r'^message/addMessage', 'lt.messagebus.addMessage', name='addMessage'),
     # Examples:
     # url(r'^$', 'learntogether.views.home', name='home'),
     # url(r'^learntogether/', include('learntogether.foo.urls')),
