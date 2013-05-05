@@ -53,15 +53,27 @@
             </div>
             <hr/>
             <div class="row-fluid">
+                <div class="container-narrow">
+                    <h4>Available Categories</h4>
+                    <div class="masthead">
+                    <ul class="nav nav-pills pull-right">
+                    {% for category in categories %}
+                    <li><a href="#">{{category}}</a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <hr/>
+                </div>
                 {% for category, courses in category_courses.items %}
                     <h4>{{category}}</h4>
                     {% for course in courses %}
                     <a href='{{course.url}}' target='BLANK'>
                         <div class="hoverDiv">
                             {{course.course}}
-                            {{course.description}}
+                            </br>
                         </div>
                     </a>
+                    <div>{{course.description}}</div>
                     <br/>
                     {% endfor %}
                 {% endfor %}

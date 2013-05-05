@@ -66,12 +66,15 @@ def addMessage(request):
 def browse(request):
     courses = Course.objects.all()
     courses_in_category = {}
+    categories = []
     for c in courses:
         if c.category not in courses_in_category:
             courses_in_category[c.category] = []
+            categories.append(c.category)
         courses_in_category[c.category].append(c)
 
     return render_to_response('browse.html', {
+        'categories': categories,
         'category_courses': courses_in_category})
 
 class PointsView(View):

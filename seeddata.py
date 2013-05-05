@@ -20,6 +20,7 @@ def init_playlist():
             category = domain_slug
 
         course = Course(category=category, course=data["title"], url=data["ka_url"], course_ext_id=data["id"], description=data['description'])
+        course.save()
 
 def init_course():
     # open the url and the json
@@ -43,9 +44,7 @@ def initialize():
     user = User(id=3, first_name='Mohit', last_name='Agrawal', nick_name='mohit9', email='mohit@lt.org', password='three', total_points=0)
     user.save()
 
-    course = Course(course='Intro to Computer Science', url='http://khanacademy.org', category='computer science')
-    course.save()
-
+    course = Course.objects.get(pk=2)
     collab_session = CollabSession(course = course, title='Lets do this')
     collab_session.save()
 
@@ -56,5 +55,8 @@ def initialize():
                                                 user=user)
     participant.save()
 
-init_playlist()
+try:
+    init_playlist()
+except:
+    pass
 initialize()

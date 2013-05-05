@@ -80,4 +80,4 @@ class Course(models.Model):
     course = models.TextField()
     url = models.TextField()
     course_ext_id = models.TextField(unique=True)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
