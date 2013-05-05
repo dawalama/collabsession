@@ -7,7 +7,7 @@ from learntogether.models import *
 
 
 def init_course():
-    # open the url and the json 
+    # open the url and the json
     courses = ['math','science','computer-science','humanities','test-prep']
 
     for course in courses:
@@ -18,7 +18,7 @@ def init_course():
             c = Course(category=course, course=child["title"], url=child["url"], course_ext_id=child["id"])
             c.save()
 
-             
+
 
 def initialize():
     user = User(id=1, first_name='Dawa', last_name='Sherpa', nick_name='dminer', email='dsherpa@lt.org', password='one', total_points=0)
