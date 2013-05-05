@@ -15,9 +15,7 @@ class CollabSession(models.Model):
     """
     Template to store session meta info
     """
-    title = models.CharField(max_length=200)
-    course_name = models.CharField(max_length=200)
-    course_url = models.CharField(max_length=200)
+    course = models.ForeignKey('Course')
     start_date = models.DateField()
     start_time = models.DateTimeField()
     repeats_in_days = models.IntegerField()
@@ -64,3 +62,8 @@ class GroupMessage(models.Model):
     nick = models.CharField(max_length=100)
     message = models.TextField();
     time = models.DateTimeField(auto_now=True) # Date stored in the db
+
+class Course(models.Model):
+    category = models.TextField()
+    course = models.TextField()
+    url = models.TextField()
