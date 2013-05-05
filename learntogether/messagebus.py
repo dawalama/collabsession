@@ -25,11 +25,13 @@ def index(request):
     })
 
 def addMessage(request):
+    print "Hello "
     user = request.POST.get("user", "nobody")
     message = request.POST.get("message", "")
-    post_time = date_parser.parse(request.POST.get("time"))
+    post_time = datetime.now()
     msg = Message(user=user, body=message, post_time=post_time)
     msg.save()
     msg_to_send = json.dumps({"user":user,"message":message, "time":date.strftime("%H:%S-%d/%m/%Y")})
+    print msg_to_send
     conn.send(msg_to_send, destination='/messages')
     return HttpResponse("ok")
