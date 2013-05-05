@@ -1,3 +1,6 @@
 *.sdb
 *.pyc
 */*.pyc
+.*.swp
+./.*.swp
+
