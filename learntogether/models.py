@@ -56,8 +56,7 @@ class CollabSessionEventParticipant(models.Model):
 
 class GroupMessage(models.Model):
     #user = models.ForeignKey(User)
-    collab_session = models.ForeignKey(CollabSession)
+    collab_session = models.ForeignKey(CollabSessionEvent)
+    nick = models.CharField(max_length=100)
     message = models.TextField();
-    post_time = models.DateTimeField(blank=True) # Date specified in the message
     time = models.DateTimeField(auto_now=True) # Date stored in the db
-    

@@ -3,10 +3,7 @@
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <link href="/static/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <!-- Le styles -->
-        <link href="../assets/css/bootstrap.css" rel="stylesheet">
+        <link href="../static/css/bootstrap.css" rel="stylesheet">
         <style type="text/css">
             body {
                 padding-top: 20px;
@@ -44,63 +41,12 @@
                 margin-top: 28px;
             }
         </style>
-        <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
 
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
-        <script src="../assets/js/html5shiv.js"></script>
+        <script src="../static/js/html5shiv.js"></script>
         <![endif]-->
-
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-        <script src="http://{{ orbited_server }}:{{ orbited_port }}/static/Orbited.js"></script>
-        <script src="http://{{ orbited_server }}:{{ orbited_port }}/static/protocols/stomp/stomp.js"></script>
-        <script>
-            document.domain = document.domain;
-            Orbited.settings.port = {{ orbited_port }};
-            Orbited.settings.hostname = document.domain;
-            TCPSocket = Orbited.TCPSocket
-            $(document).ready(function() {
-                stomp = new STOMPClient();
-                stomp.onerror = function(error) {
-                    alert("Error:" + error);
-                };
-                stomp.onclose = function(c) {
-                    alert("Lost connection, Code:" + c);
-                };
-                stomp.onconnectedframe = function(){
-                    console.log('Connected. Subscribing');
-                    stomp.subscribe("/messages");
-                };
-                stomp.onmessageframe = function(frame){
-                    function add_message(msg) {
-                        $("<p>" + msg["time"] + " | " + msg["user"] + " : " + msg["message"] + "</p>").appendTo("#messages")
-                    };
-                    add_message(JSON.parse(frame.body));
-                    $('#messages').animate({
-                        scrollTop: $('#messages').get(0).scrollHeight
-                    }, 1500);
-                };
-                setTimeout(function () {
-                    stomp.connect(document.domain, {{ orbited_stomp_port }});
-                }, 500);
-                $("#send").click(function(data) {
-                    var message = $("#message").val()
-                    var user = $("#user").val()
-                    $.post("/message/addMessage/", {"message":message, "user":user});
-                    $("#message").val("")
-                })
-                $("input").bind("keydown", function(event) {
-                    var keycode = (event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode));
-                    if (keycode == 13) {
-                        document.getElementById('send').click();
-                        return false;
-                        } else  {
-                        return true;
-                    }
-                });
-                $('#messages').scrollTop($('#messages').get(0).scrollHeight);
-            });
-        </script>
     </head>
     <body>
         <div class="container-narrow">
@@ -113,28 +59,22 @@
                 <h3 class="muted">Learn Together</h3>
             </div>
             <hr/>
-            <div class="jumbotron" style="clear: width:600; height:400; border:1px solid red;">
-                Google Hangout Embed can go here
-                <div style="float:right; width:150; height:400;border-left:1px solid red;">
-                    List of participants will go here
-                </div>
-            </div> 
-            <div class="row-fluid" style='border:1px solid red;'>
-                <div id="messages">
-                    {% for message in messages %}
-                    <p>{{message.time|date:"H:i-d/m/Y"}} | {{message.user}} : {{message.body}}</p>
-                    {% endfor %}
-                </div>
-                <div id="new_message">
-                    <input placeholder="Your nick" type="text" name="user" value="" id="user">
-                    <input placeholder="Message" type="text" name="message" value="" id="message">  
-                    <input type="submit" id="send" value="Send">
-                </div>
+            <div class="row-fluid"> 
+                <b>Current Sessions</b>
+                <hr/>
+                {% for collab_session in current_sessions %}
+                <li><a href="/message/?cseid={{collab_session.id}}&uid={{user.id}}">
+                    <div>
+                    {{collab_session.collab_session.title}}
+                    ( {{collab_session.collab_session.course_name}} )
+                    </div>
+                </a></li>
+                {% endfor %}
             </div>
             <hr/>
             <div class="footer">
                 <p>&copy; NycBigApp Hackathon 2013 </p>
             </div>
-            <div>
-            </body>
-        </html>
+        </div>
+    </body>
+</html>

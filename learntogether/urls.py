@@ -6,8 +6,8 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^$', 'learntogether.views.home', name='home'),
-    url(r'^message/', 'learntogether.messagebus.index', name='messages'),
     url(r'^message/addMessage', 'learntogether.messagebus.addMessage', name='addMessage'),
+    url(r'^message/', 'learntogether.messagebus.index', name='messages'),
     # Examples:
     # url(r'^$', 'learntogether.views.home', name='home'),
     # url(r'^learntogether/', include('learntogether.foo.urls')),
