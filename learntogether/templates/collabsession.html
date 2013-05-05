@@ -30,10 +30,6 @@
                 font-size: 72px;
                 line-height: 1;
             }
-            .jumbotron .btn {
-                font-size: 21px;
-                padding: 14px 24px;
-            }
 
             .messages {
                 scroll: auto;
@@ -49,7 +45,7 @@
         <![endif]-->
         <script src='http://static.opentok.com/webrtc/v2.0/js/TB.min.js'></script>
         <script src='../static/js/video.js'></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
         <script src="http://{{ orbited_server }}:{{ orbited_port }}/static/Orbited.js"></script>
         <script src="http://{{ orbited_server }}:{{ orbited_port }}/static/protocols/stomp/stomp.js"></script>
         <script>
@@ -107,23 +103,23 @@
             <div class="masthead">
                 <ul class="nav nav-pills pull-right">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/browse">Browse Courses</a></li>
-                    <li><a href="#">Leader board</a></li>
+                    <li><a href="#">Browse Courses</a></li>
+                    <li><a href="#">Leaderboard</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
                 <h3 class="muted">Learn Together</h3>
             </div>
             <hr/>
             <div id='videoroom' class="jumbotron" style="clear: width:600; height:300; border:1px solid red;">
-                <div id="game" style="float:right; width:150; height:300;border-left:1px solid red;">
+                <div id="game" style="float:right; width:200; height:300;border-left:1px solid red;">
                     {% for user_game_point in user_game_points %}
-                    {{ user_game_point }}
-                        <div class="game_user">
+                        <div class="game_user" style="padding-bottom:15px;padding-top:15px;border-bottom:1px solid #ccc">
                             {% with user=user_game_point.user %}
-                            {{ user }}
-                            <span class="user_points">{{ user.total_points }}</span>
-                            <span class="user_name">{{ user.first_name }} {{ user.last_name }}</span>
-                            <button class="give_points" data-user="{{ user.id }}" data-session="{{ user_game_point.collab_session_event.id }}">Great Comment</button>
+                            <div style="margin-left:0;padding-bottom:10px;">
+                                <span id="user_points">{{ user.total_points }} points</span>
+                                <span id="user_name"> - {{ user.first_name }} {{ user.last_name }}</span>
+                            </div>
+                            <button class="give_points btn btn-success" data-user="{{ user.id }}" data-session="{{ user_game_point.collab_session_event.id }}" style="display:block; margin-left:35px;">Great Comment</button>
                             {% endwith %}
                         </div>
                     {% endfor %}
@@ -135,15 +131,15 @@
                         var $this = $(this),
                             user_id = $this.data('user'),
                             session_id = $this.data('session'),
-                            $points = $this.siblings('.user_points'),
-                            points = parseInt($points.val(), 10);
+                            $points = $('#user_points'),
+                            points = parseInt($points.text(), 10);
 
                         // update the user's points in the db
                         $.post('/points/' + session_id + '/' + user_id);
 
                         // update the user's points on the page
                         points += 5;
-                        $points.val(points.toString());
+                        $points.text(points.toString() + ' points');
                     });
                 </script>
                 <div id='publisher' style='float:'> </div>

@@ -37,12 +37,15 @@ def index(request):
     user_id = request.GET.get("uid")
     collab_session = CollabSessionEvent.objects.get(id=collab_session_id)
     current_user = User.objects.get(id=user_id)
+    points = UserGamePoints.objects.filter(collab_session_event=collab_session)
+    print points[0].user.total_points
 
     messages = Message.objects.all().filter(collab_session=collab_session)
     return render_to_response("collabsession.html", {
         "messages":messages,
         "collab_session_id": collab_session_id,
         "user": current_user,
+        'user_game_points': points,
         "G_APP_ID":settings.GOOGLE_APP_ID,
         "orbited_server":settings.ORBITED_SERVER,
         "orbited_port":settings.ORBITED_PORT,
@@ -110,7 +113,7 @@ class PointsView(View):
         num_updated2 = User.objects.filter(id=user_id).update(total_points=F('total_points')+5)
 
         # make sure only 1 user was updated
-        if num_updated != 1 or num_updated2 != 1:
+        if num_updated1 != 1 or num_updated2 != 1:
             return HttpResponseBadRequest()
 
         return HttpResponse()

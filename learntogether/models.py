@@ -34,7 +34,7 @@ class UserGamePoints(models.Model):
     Keep track of a user's points during a given
     game.
     """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey('User')
     points = models.IntegerField(default=0)
     collab_session_event = models.ForeignKey('CollabSessionEvent', blank=True, null=True) # Point gained in a session
 
