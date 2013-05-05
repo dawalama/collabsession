@@ -71,7 +71,8 @@
                 };
                 stomp.onmessageframe = function(frame){
                     function add_message(msg) {
-                        $("<tr><td>" + msg["time"] + "</td><td>" + msg["nick"] + " : " + msg["message"] + "</td></tr>").appendTo("#messages")
+                        console.log(msg);
+                        $("<tr><td width='100%' align='left'>" + msg["nick"] + " : " + msg["message"] + " at " + msg["time"] + "</td></tr>").appendTo("#messages")
                     };
                     add_message(JSON.parse(frame.body));
                     $('#messages').animate({
@@ -125,9 +126,9 @@
             <div class="row-fluid" style='clear:both;border:1px solid #ddd;'>
                 <div id="messages">
                     <table width='100%'>
-                    <tr style='background-color:#ddd'><td width="20%">Time</td><td>Message</td></tr>
+                    <tr style='background-color:#ddd'><td>Message</td></tr>
                     {% for message in messages %}
-                    <tr><td width='20%'>{{message.time|date:"H:i-d/m/Y"}}</td><td width='*' align='left'>{{message.nick}} : {{message.message}}</td></tr>
+                    <tr><td width='100%' align='left'>{{message.nick}} : {{message.message}} at {{message.time|date:"H:i-d/m/Y"}}</td></tr>
                     {% endfor %}
                     </table>
                 </div>

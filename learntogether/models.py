@@ -16,9 +16,10 @@ class CollabSession(models.Model):
     Template to store session meta info
     """
     course = models.ForeignKey('Course')
-    start_date = models.DateField()
-    start_time = models.DateTimeField()
-    repeats_in_days = models.IntegerField()
+    title = models.CharField(max_length=200)
+    start_date = models.DateField(auto_now=True)
+    start_time = models.DateTimeField(auto_now=True)
+    repeats_in_days = models.IntegerField(default=7)
 
 class UserGamePoint(models.Model):
     """
@@ -46,9 +47,9 @@ class CollabSessionEvent(models.Model):
     Individiual Session
     """
     collab_session = models.ForeignKey('CollabSession')
-    session_date = models.DateField()
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    session_date = models.DateField(auto_now=True)
+    start_time = models.DateTimeField(auto_now=True)
+    end_time = models.DateTimeField(null=True)
     leader = models.ForeignKey(User, blank=True, null=True)
 
 class CollabSessionEventParticipant(models.Model):
