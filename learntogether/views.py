@@ -1,12 +1,13 @@
 from __future__ import unicode_literals
-
+import json
+import urllib2
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
 from django.views.generic.base import View
 from django.core import serializers
 from django.db.models import F
 from datetime import datetime
-from learntogether.models import CollabSessionEvent, User
+from learntogether.models import CollabSessionEvent, User , Course
 
 def home(request):
     #current_collab_sessions = CollabSessionEvent.objects.all().filter(session_date=datetime.today()).filter(end_time__gte = datetime.now())
@@ -16,6 +17,20 @@ def home(request):
         'current_sessions': current_collab_sessions,
         'user': current_user,
         })
+
+def init_course():
+    # open the url and the json 
+    courses = ['math','science','computer-science','humanities','test-prep']
+
+    for course1 in courses:
+        data = urllib2.urlopen('http://www.khanacademy.org/api/v1/topic/'+course1)
+        j = json.load(data)
+        children=j['children']
+        for child in children :
+             Course(category=course,course= child["title"],url=child["url"])
+             
+
+
 
 class PointsView(View):
     """
