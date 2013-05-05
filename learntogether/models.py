@@ -7,7 +7,7 @@ class User(models.Model):
     nick_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     password = models.TextField()
-    total_points = models.IntegerField()
+    total_points = models.IntegerField(default=0)
 
 class CollabSession(models.Model):
     """

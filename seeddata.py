@@ -20,6 +20,8 @@ def initialize():
     collab_event  = CollabSessionEvent(collab_session=collab_session)
     collab_event.save()
 
-
+    participant = CollabSessionEventParticipant(collab_session=collab_event,
+                                                user=user)
+    participant.save()
 
 initialize()

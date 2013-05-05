@@ -1,24 +1,63 @@
 from __future__ import unicode_literals
 import json
 import urllib2
+import stomp
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
 from django.views.generic.base import View
 from django.core import serializers
+from django.conf import settings
+from dateutil import parser as date_parser
 from django.db.models import F
 from datetime import datetime
-from learntogether.models import CollabSessionEvent, User , Course
+from learntogether.models import CollabSessionEvent, User, Course, UserGamePoints
+from learntogether.models import GroupMessage as Message
+
+conn = stomp.Connection()
+conn.start()
+conn.connect()
+conn.subscribe(destination='/messages', ack='auto')
 
 def home(request):
     #current_collab_sessions = CollabSessionEvent.objects.all().filter(session_date=datetime.today()).filter(end_time__gte = datetime.now())
     collab_session_event = CollabSessionEvent.objects.all()
     current_user = User.objects.get(id=request.GET.get('uid'))
-    points = UserGamePoints.objects.filter(collab_session_event=collab_session_event)
     return render_to_response('index.html', {
         'current_sessions': collab_session_event,
         'user': current_user,
         'user_game_points': points,
         })
+
+def index(request):
+    """
+    handle the index request
+    """
+    collab_session_id = request.GET.get("cseid")
+    user_id = request.GET.get("uid")
+    collab_session = CollabSessionEvent.objects.get(id=collab_session_id)
+    current_user = User.objects.get(id=user_id)
+
+    messages = Message.objects.all().filter(collab_session=collab_session)
+    return render_to_response("collabsession.html", {
+        "messages":messages,
+        "collab_session_id": collab_session_id,
+        "user": current_user,
+        "G_APP_ID":settings.GOOGLE_APP_ID,
+        "orbited_server":settings.ORBITED_SERVER,
+        "orbited_port":settings.ORBITED_PORT,
+        "orbited_stomp_port":settings.ORBITED_STOMP_PORT,
+    })
+
+def addMessage(request):
+    collab_session_id = request.POST.get("cseid")
+    nick = request.POST.get("nick", "nobody")
+    message = request.POST.get("message", "")
+    collab_session = CollabSessionEvent.objects.get(id=collab_session_id)
+    msg = Message(collab_session=collab_session, nick=nick, message=message)
+    msg.save()
+    msg_to_send = json.dumps({"nick":nick, "message":message, "time":msg.time.strftime("%H:%S-%d/%m/%Y")})
+    conn.send(msg_to_send, destination='/messages')
+    return HttpResponse("ok")
 
 def init_course():
     # open the url and the json

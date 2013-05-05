@@ -116,8 +116,10 @@
             <div id='videoroom' class="jumbotron" style="clear: width:600; height:300; border:1px solid red;">
                 <div id="game" style="float:right; width:150; height:300;border-left:1px solid red;">
                     {% for user_game_point in user_game_points %}
+                    {{ user_game_point }}
                         <div class="game_user">
                             {% with user=user_game_point.user %}
+                            {{ user }}
                             <span class="user_points">{{ user.total_points }}</span>
                             <span class="user_name">{{ user.first_name }} {{ user.last_name }}</span>
                             <button class="give_points" data-user="{{ user.id }}" data-session="{{ user_game_point.collab_session_event.id }}">Great Comment</button>
