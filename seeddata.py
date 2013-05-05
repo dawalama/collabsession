@@ -6,6 +6,21 @@ import urllib2
 from learntogether.models import *
 
 
+def init_playlist():
+    courses = ['math','science','computer-science','humanities','test-prep']
+
+    data = urllib2.urlopen('http://www.khanacademy.org/api/v1/playlists')
+    jdata = json.load(data)
+
+    for data in jdata:
+        domain_slug = data['domain_slug']
+        if domain_slug is None:
+            category = 'general'
+        else:
+            category = domain_slug
+
+        course = Course(category=category, course=data["title"], url=data["ka_url"], course_ext_id=data["id"], description=data['description'])
+
 def init_course():
     # open the url and the json
     courses = ['math','science','computer-science','humanities','test-prep']
@@ -41,5 +56,5 @@ def initialize():
                                                 user=user)
     participant.save()
 
-init_course()
+init_playlist()
 initialize()
