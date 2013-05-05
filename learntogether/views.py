@@ -25,7 +25,6 @@ def home(request):
     return render_to_response('index.html', {
         'current_sessions': collab_session_event,
         'user': current_user,
-        'user_game_points': points,
         })
 
 def index(request):
@@ -59,16 +58,18 @@ def addMessage(request):
     conn.send(msg_to_send, destination='/messages')
     return HttpResponse("ok")
 
-def init_course():
-    # open the url and the json
-    courses = ['math','science','computer-science','humanities','test-prep']
+def browse(request):
+    categories = ['math','science','computer-science','humanities','test-prep']
+    courses = Course.objects.all()
+    courses_in_category = {}
+    for c in courses:
+        if c.category not in courses_in_category:
+            courses_in_category[c.category] = []
+        courses_in_category[c.category].append(c)
 
-    for course1 in courses:
-        data = urllib2.urlopen('http://www.khanacademy.org/api/v1/topic/'+course1)
-        j = json.load(data)
-        children=j['children']
-        for child in children :
-             Course(category=course,course= child["title"],url=child["url"])
+    return render_to_response('browse.html', {
+        'categories': categories,
+        'category_courses': courses_in_category})
 
 class PointsView(View):
     """

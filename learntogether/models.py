@@ -1,5 +1,9 @@
 from django.db import models
 from django.db.models import signals
+#from south.modelsinspector import add_introspection_rules
+
+# fix South introspection for custom field
+#add_introspection_rules([], ["^app\.db\.models.AutoField"])
 
 class User(models.Model):
     first_name = models.CharField(max_length=100)
@@ -73,3 +77,4 @@ class Course(models.Model):
     category = models.TextField()
     course = models.TextField()
     url = models.TextField()
+    course_ext_id = models.TextField(unique=True)
