@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from learntogether import views
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -8,13 +9,5 @@ urlpatterns = patterns('',
     url(r'^$', 'learntogether.views.home', name='home'),
     url(r'^message/addMessage', 'learntogether.messagebus.addMessage', name='addMessage'),
     url(r'^message/', 'learntogether.messagebus.index', name='messages'),
-    # Examples:
-    # url(r'^$', 'learntogether.views.home', name='home'),
-    # url(r'^learntogether/', include('learntogether.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    (r'^points/(?P<collab_session>[^/]+)(/(?P<user_id>\d+))?$', views.PointsView.as_view()),
 )

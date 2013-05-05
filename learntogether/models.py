@@ -1,4 +1,8 @@
 from django.db import models
+from south.modelsinspector import add_introspection_rules
+
+# fix South introspection for custom field
+add_introspection_rules([], ["^app\.db\.models.AutoField"])
 
 class User(models.Model):
     first_name = models.CharField(max_length=100)
@@ -13,7 +17,7 @@ class CollabSession(models.Model):
     """
     title = models.CharField(max_length=200)
     course_name = models.CharField(max_length=200)
-    course_soure = models.CharField(max_length=200)
+    course_url = models.CharField(max_length=200)
     start_date = models.DateField()
     start_time = models.DateTimeField()
     repeats_in_days = models.IntegerField()
@@ -25,7 +29,7 @@ class UserGamePoint(models.Model):
     user = models.ForeignKey(User)
     point = models.IntegerField()
     reason = models.CharField(max_length=100, default='Great Comment')
-    collab_session = models.ForeignKey(CollabSession, blank=True, null=True) # Point gained in a session
+    collab_session_event = models.ForeignKey(CollabSessionEvent, blank=True, null=True) # Point gained in a session
 
 class Achievement(models.Model):
     name = models.CharField(max_length=100)
@@ -47,10 +51,10 @@ class CollabSessionEvent(models.Model):
     session_date = models.DateField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    leader = models.ForeignKey(User)
+    leader = models.ForeignKey(User, blank=True, null=True)
 
 class CollabSessionEventParticipant(models.Model):
-    collab_session = models.ForeignKey(CollabSession)
+    collab_session = models.ForeignKey(CollabSessionEvent)
     user = models.ForeignKey(User)
     time_joined = models.DateTimeField(auto_now=True)
 
