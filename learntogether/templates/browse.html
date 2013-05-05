@@ -28,18 +28,10 @@
                 font-size: 72px;
                 line-height: 1;
             }
-            .jumbotron .btn {
-                font-size: 21px;
-                padding: 14px 24px;
-            }
 
-            /* Supporting marketing content */
-            .marketing {
-                margin: 60px 0;
-            }
-            .marketing p + h4 {
-                margin-top: 28px;
-            }
+            .hoverDiv {background: #fff; padding:5px;}
+            .hoverDiv:hover {background: #C0D7EF; padding:5px; cursor:pointer; }
+
         </style>
         <link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -54,7 +46,7 @@
                 <ul class="nav nav-pills pull-right">
                     <li><a href="/">Home</a></li>
                     <li class="active"><a href="#">Browse Courses</a></li>
-                    <li><a href="#">Leader board</a></li>
+                    <li><a href="#">Leaderboard</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
                 <h3 class="muted">Learn Together</h3>
@@ -64,10 +56,11 @@
                 {% for category, courses in category_courses.items %}
                     <h4>{{category}}</h4>
                     {% for course in courses %}
-                        <div>
-                            {{course.course}} <br/>
-                            {{course.url}}
+                    <a href='{{course.url}}' target='BLANK'>
+                        <div class="hoverDiv">
+                            {{course.course}} ({{course.url}})
                         </div>
+                    </a>
                     <br/>
                     {% endfor %}
                 {% endfor %}

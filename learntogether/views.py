@@ -64,7 +64,6 @@ def addMessage(request):
     return HttpResponse("ok")
 
 def browse(request):
-    categories = ['math','science','computer-science','humanities','test-prep']
     courses = Course.objects.all()
     courses_in_category = {}
     for c in courses:
@@ -73,7 +72,6 @@ def browse(request):
         courses_in_category[c.category].append(c)
 
     return render_to_response('browse.html', {
-        'categories': categories,
         'category_courses': courses_in_category})
 
 class PointsView(View):
