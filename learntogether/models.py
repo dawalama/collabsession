@@ -29,7 +29,7 @@ class UserGamePoint(models.Model):
     user = models.ForeignKey(User)
     point = models.IntegerField()
     reason = models.CharField(max_length=100, default='Great Comment')
-    collab_session_event = models.ForeignKey(CollabSessionEvent, blank=True, null=True) # Point gained in a session
+    collab_session_event = models.ForeignKey('CollabSessionEvent', blank=True, null=True) # Point gained in a session
 
 class Achievement(models.Model):
     name = models.CharField(max_length=100)
@@ -41,26 +41,26 @@ class UserAchievement(models.Model):
     achivement = models.ForeignKey(Achievement)
     date_achieved = models.DateTimeField(auto_now=True)
     reason = models.CharField(max_length=100)
-    collab_session = models.ForeignKey(CollabSession, blank=True, null=True) # Point gained in a session
+    collab_session = models.ForeignKey('CollabSession', blank=True, null=True) # Point gained in a session
 
 class CollabSessionEvent(models.Model):
     """
     Individiual Session
     """
-    collab_session = models.ForeignKey(CollabSession)
+    collab_session = models.ForeignKey('CollabSession')
     session_date = models.DateField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     leader = models.ForeignKey(User, blank=True, null=True)
 
 class CollabSessionEventParticipant(models.Model):
-    collab_session = models.ForeignKey(CollabSessionEvent)
+    collab_session = models.ForeignKey('CollabSessionEvent')
     user = models.ForeignKey(User)
     time_joined = models.DateTimeField(auto_now=True)
 
 class GroupMessage(models.Model):
     #user = models.ForeignKey(User)
-    collab_session = models.ForeignKey(CollabSessionEvent)
+    collab_session = models.ForeignKey('CollabSessionEvent')
     nick = models.CharField(max_length=100)
     message = models.TextField();
     time = models.DateTimeField(auto_now=True) # Date stored in the db
