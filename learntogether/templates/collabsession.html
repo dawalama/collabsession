@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-        <link href="/static/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" /> 
+        <link href="/static/css/bootstrap.css" media="screen" rel="stylesheet" type="text/css" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -114,15 +114,38 @@
             </div>
             <hr/>
             <div id='videoroom' class="jumbotron" style="clear: width:600; height:300; border:1px solid red;">
-                <div style="float:right; width:150; height:300;border-left:1px solid red;">
-                    List of participants will go here
+                <div id="game" style="float:right; width:150; height:300;border-left:1px solid red;">
+                    {% for user_game_point in user_game_points %}
+                        <div class="game_user">
+                            {% with user=user_game_point.user %}
+                            <span class="user_points">{{ user.total_points }}</span>
+                            <span class="user_name">{{ user.first_name }} {{ user.last_name }}</span>
+                            <button class="give_points" data-user="{{ user.id }}" data-session="{{ user_game_point.collab_session_event.id }}">Great Comment</button>
+                            {% endwith %}
+                        </div>
+                    {% endfor %}
                 </div>
+                <script>
+                    $('.give_points').click(function() {
+                        /* give the user points */
+
+                        var $this = $(this),
+                            user_id = $this.data('user'),
+                            session_id = $this.data('session'),
+                            points = $this.siblings('.user_points');
+
+                        // update the user's points in the db
+                        $.post('/points/' + session_id + '/' + user_id);
+
+                        // update the user's points on the page
+                    });
+                </script>
                 <div id='publisher' style='float:'> </div>
                 <div id="stream-container-1"></div>
                 <div id="stream-container-2"></div>
                 <div id="stream-container-3"></div>
                 <div id="stream-container-4"></div>
-            </div> 
+            </div>
             <div class="row-fluid" style='clear:both;border:1px solid #ddd;'>
                 <div id="messages">
                     <table width='100%'>
@@ -149,3 +172,6 @@
         </div>
     </body>
 </html>
+
+<div>
+</div>
