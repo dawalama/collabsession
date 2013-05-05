@@ -11,15 +11,17 @@ from learntogether.models import CollabSessionEvent, User , Course
 
 def home(request):
     #current_collab_sessions = CollabSessionEvent.objects.all().filter(session_date=datetime.today()).filter(end_time__gte = datetime.now())
-    current_collab_sessions = CollabSessionEvent.objects.all()
+    collab_session_event = CollabSessionEvent.objects.all()
     current_user = User.objects.get(id=request.GET.get('uid'))
+    points = UserGamePoints.objects.filter(collab_session_event=collab_session_event)
     return render_to_response('index.html', {
-        'current_sessions': current_collab_sessions,
+        'current_sessions': collab_session_event,
         'user': current_user,
+        'user_game_points': points,
         })
 
 def init_course():
-    # open the url and the json 
+    # open the url and the json
     courses = ['math','science','computer-science','humanities','test-prep']
 
     for course1 in courses:
@@ -28,9 +30,6 @@ def init_course():
         children=j['children']
         for child in children :
              Course(category=course,course= child["title"],url=child["url"])
-             
-
-
 
 class PointsView(View):
     """
@@ -49,7 +48,7 @@ class PointsView(View):
         # get a json representation of the points users
         # have received in this collab session
         try:
-            points = UserGamePoint.objects.get(collab_session_event=collab_session_event)
+            points = UserGamePoints.objects.get(collab_session_event=collab_session_event)
         except UserGamePoint.DoesNotExist:
             # shouldn't happen
             return HttpResponseBadRequest()
@@ -65,8 +64,8 @@ class PointsView(View):
         user_id = kwargs['user_id']
 
         # give the user 10 points
-        num_updated1 = UserGamePoint.objects.filter(collab_session_event=collab_session_event).update(points=F('points')+10)
-        num_updated2 = User.objects.filter(id=user_id).update(total_points=F('total_points')+10)
+        num_updated1 = UserGamePoints.objects.filter(collab_session_event=collab_session_event).update(points=F('points')+5)
+        num_updated2 = User.objects.filter(id=user_id).update(total_points=F('total_points')+5)
 
         # make sure only 1 user was updated
         if num_updated != 1 or num_updated2 != 1:

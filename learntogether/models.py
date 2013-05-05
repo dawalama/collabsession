@@ -1,14 +1,12 @@
 from django.db import models
-from south.modelsinspector import add_introspection_rules
-
-# fix South introspection for custom field
-add_introspection_rules([], ["^app\.db\.models.AutoField"])
+from django.db.models import signals
 
 class User(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     nick_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
+    password = models.TextField()
     total_points = models.IntegerField()
 
 class CollabSession(models.Model):
@@ -21,13 +19,13 @@ class CollabSession(models.Model):
     start_time = models.DateTimeField(auto_now=True)
     repeats_in_days = models.IntegerField(default=7)
 
-class UserGamePoint(models.Model):
+class UserGamePoints(models.Model):
     """
-    Store why user was awarded points
+    Keep track of a user's points during a given
+    game.
     """
     user = models.ForeignKey(User)
-    point = models.IntegerField()
-    reason = models.CharField(max_length=100, default='Great Comment')
+    points = models.IntegerField(default=0)
     collab_session_event = models.ForeignKey('CollabSessionEvent', blank=True, null=True) # Point gained in a session
 
 class Achievement(models.Model):
@@ -50,12 +48,19 @@ class CollabSessionEvent(models.Model):
     session_date = models.DateField(auto_now=True)
     start_time = models.DateTimeField(auto_now=True)
     end_time = models.DateTimeField(null=True)
-    leader = models.ForeignKey(User, blank=True, null=True)
+    leader = models.ForeignKey('User', blank=True, null=True)
 
 class CollabSessionEventParticipant(models.Model):
     collab_session = models.ForeignKey('CollabSessionEvent')
     user = models.ForeignKey(User)
     time_joined = models.DateTimeField(auto_now=True)
+
+def create_usergamepoints(sender, instance, created, raw, update_fields, **kwargs):
+    participant = instance
+    points = UserGamePoints(user=participant.user,
+                            collab_session_event=participant.collab_session)
+    points.save()
+signals.post_save.connect(create_usergamepoints, sender=CollabSessionEventParticipant, dispatch_uid='create_usergamepoints')
 
 class GroupMessage(models.Model):
     #user = models.ForeignKey(User)

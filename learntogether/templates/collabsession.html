@@ -132,12 +132,15 @@
                         var $this = $(this),
                             user_id = $this.data('user'),
                             session_id = $this.data('session'),
-                            points = $this.siblings('.user_points');
+                            $points = $this.siblings('.user_points'),
+                            points = parseInt($points.val(), 10);
 
                         // update the user's points in the db
                         $.post('/points/' + session_id + '/' + user_id);
 
                         // update the user's points on the page
+                        points += 5;
+                        $points.val(points.toString());
                     });
                 </script>
                 <div id='publisher' style='float:'> </div>
