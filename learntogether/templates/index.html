@@ -60,15 +60,19 @@
             </div>
             <hr/>
             <div class="row-fluid"> 
-                <b>Current Sessions</b>
+                <b>Active Sessions</b>
                 <hr/>
-                {% for collab_session in current_sessions %}
-                <li><a href="/message/?cseid={{collab_session.id}}&uid={{user.id}}">
+                {% for session in current_sessions %}
+                <a href="/message/?cseid={{session.id}}&uid={{user.id}}">
                     <div>
-                    {{collab_session.collab_session.title}}
-                    ( {{collab_session.collab_session.course_name}} )
+                    {{session.collab_session.title}}
+                    ( {{session.collab_session.course.course}} )
+                    <div>
+                        {{session.collab_session.course.url}}
                     </div>
-                </a></li>
+                    </div>
+                </a>
+                <br/>
                 {% endfor %}
             </div>
             <hr/>
