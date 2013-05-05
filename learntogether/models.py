@@ -10,8 +10,14 @@ class User(models.Model):
     last_name = models.CharField(max_length=100)
     nick_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    is_authenticated = models.BooleanField(default=False)
     password = models.TextField()
+    last_login = models.DateTimeField(blank=True, null=True)
     total_points = models.IntegerField(default=0)
+
+    def is_authenticated(self):
+        return True
 
 class CollabSession(models.Model):
     """

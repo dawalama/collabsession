@@ -21,11 +21,11 @@ def init_course():
              
 
 def initialize():
-    user = User(id=1, first_name='Dawa', last_name='Sherpa', nick_name='dminer', total_points=0)
+    user = User(id=1, first_name='Dawa', last_name='Sherpa', nick_name='dminer', email='dsherpa@lt.org', password='one', total_points=0)
     user.save()
-    user = User(id=2, first_name='Micheal', last_name='Kolodny', nick_name='mkolodny', total_points=0)
+    user = User(id=2, first_name='Micheal', last_name='Kolodny', nick_name='mkolodny', email='michael@lt.org', password='two', total_points=0)
     user.save()
-    user = User(id=3, first_name='Mohit', last_name='Agrawal', nick_name='mohit9', total_points=0)
+    user = User(id=3, first_name='Mohit', last_name='Agrawal', nick_name='mohit9', email='mohit@lt.org', password='three', total_points=0)
     user.save()
 
     course = Course(course='Intro to Computer Science', url='http://khanacademy.org', category='computer science')

@@ -3,6 +3,8 @@ import json
 import urllib2
 import stomp
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
 from django.shortcuts import render_to_response, render
 from django.views.generic.base import View
 from django.core import serializers
@@ -18,13 +20,13 @@ conn.start()
 conn.connect()
 conn.subscribe(destination='/messages', ack='auto')
 
+@login_required
 def home(request):
     #current_collab_sessions = CollabSessionEvent.objects.all().filter(session_date=datetime.today()).filter(end_time__gte = datetime.now())
     collab_session_event = CollabSessionEvent.objects.all()
-    current_user = User.objects.get(id=request.GET.get('uid'))
     return render_to_response('index.html', {
         'current_sessions': collab_session_event,
-        'user': current_user,
+        'user': request.user,
         })
 
 def index(request):

@@ -10,5 +10,7 @@ urlpatterns = patterns('',
     url(r'^message/addMessage', 'learntogether.views.addMessage', name='addMessage'),
     url(r'^message/', 'learntogether.views.index', name='messages'),
     url(r'^browse/', 'learntogether.views.browse', name='home'),
+    url(r'^accounts/login', 'django.contrib.auth.views.login'),
+    url(r'^accounts/profile', 'learntogether.views.home', name='home'),
     (r'^points/(?P<collab_session_event>[^/]+)(/(?P<user_id>\d+))?$', views.PointsView.as_view()),
 )
